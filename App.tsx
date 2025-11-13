@@ -105,7 +105,6 @@ const imageRandom = {
   5: "/7.webp",
   6: "/8.webp",
   7: "/9.webp",
-  8: "/10.webp",
 };
 
 // Countdown Timer Component
@@ -326,7 +325,7 @@ export default function App() {
           if (!isCurtainOpen) {
             handleCurtainOpen();
           }
-        }, 1500)
+        }, 2000)
       : null;
 
     return () => {
