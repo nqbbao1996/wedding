@@ -93,19 +93,19 @@ const ArrowLeftIcon = ({ className }: { className?: string }) => (
 );
 
 const imageImport = {
-  5: "./public/5.webp",
-  11: "./public/11.webp",
+  5: "/5.webp",
+  11: "/11.webp",
 };
 
 const imageRandom = {
-  1: "./public/2.webp",
-  2: "./public/3.webp",
-  3: "./public/4.webp",
-  4: "./public/6.webp",
-  5: "./public/7.webp",
-  6: "./public/8.webp",
-  7: "./public/9.webp",
-  8: "./public/10.webp",
+  1: "/2.webp",
+  2: "/3.webp",
+  3: "/4.webp",
+  4: "/6.webp",
+  5: "/7.webp",
+  6: "/8.webp",
+  7: "/9.webp",
+  8: "/10.webp",
 };
 
 // Countdown Timer Component
