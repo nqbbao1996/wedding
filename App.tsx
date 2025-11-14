@@ -501,10 +501,6 @@ export default function App() {
 
         <main className="max-w-4xl mx-auto p-6 md:p-12 text-center text-[#5c4033]">
           <section className="mb-12">
-            <Countdown targetDate={weddingDate} />
-          </section>
-
-          <section className="mb-12">
             <h2 className="font-dancing text-4xl md:text-5xl mb-4 text-amber-800">
               Kính mời {guestName} đến tham dự lễ cưới.
             </h2>
@@ -529,6 +525,15 @@ export default function App() {
             <div className="flex flex-col items-center mb-8">
               <MapPinIcon className="h-12 w-12 text-amber-800 mb-2" />
               <h4 className="text-xl font-semibold">ĐỊA ĐIỂM</h4>
+              {/* add link gg map */}
+              <a
+                href="https://maps.app.goo.gl/JkX6jiKD56hp93av7"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-lg cursor-pointer underline"
+              >
+                Hẽm 44 Đường Nguyễn văn Linh, Phường Long Hoa, Tây Ninh
+              </a>
             </div>
             <div className="rounded-lg overflow-hidden shadow-2xl border-4 border-white">
               <iframe
