@@ -97,16 +97,6 @@ const imageImport = {
   11: "/11.webp",
 };
 
-const imageRandom = {
-  1: "/2.webp",
-  2: "/3.webp",
-  3: "/4.webp",
-  4: "/6.webp",
-  5: "/7.webp",
-  6: "/8.webp",
-  7: "/9.webp",
-};
-
 // Countdown Timer Component
 interface TimeLeft {
   days: number;
@@ -164,99 +154,6 @@ const Countdown = ({ targetDate }: { targetDate: Date }) => {
     </div>
   );
 };
-
-const FloatingImages = React.memo(() => {
-  const allImages = Object.values(imageRandom);
-
-  const getRandomImages = useCallback(() => {
-    const shuffled = [...allImages].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, 2);
-  }, [allImages]);
-
-  const [selectedImages] = useState(getRandomImages);
-
-  const generateFloatingAnimation = useCallback((index: number) => {
-    const animationName = `floating-${index}`;
-    const duration = 8 + (index % 4) * 8;
-    const delay = index * 1.5;
-
-    return {
-      animationName,
-      animationDuration: `${duration}s`,
-      animationDelay: `${delay}s`,
-      animationIterationCount: "infinite",
-      animationTimingFunction: "ease-in-out",
-    };
-  }, []);
-
-  const floatingKeyframes = useMemo(
-    () => `
-    @keyframes floating-0 {
-      0% { transform: translate(10vw, 10vh) rotate(0deg); }
-      25% { transform: translate(80vw, 20vh) rotate(90deg); }
-      50% { transform: translate(70vw, 80vh) rotate(180deg); }
-      75% { transform: translate(20vw, 70vh) rotate(270deg); }
-      100% { transform: translate(10vw, 10vh) rotate(360deg); }
-    }
-    @keyframes floating-1 {
-      0% { transform: translate(80vw, 15vh) rotate(0deg); }
-      25% { transform: translate(15vw, 60vh) rotate(-90deg); }
-      50% { transform: translate(60vw, 75vh) rotate(-180deg); }
-      75% { transform: translate(85vw, 30vh) rotate(-270deg); }
-      100% { transform: translate(80vw, 15vh) rotate(-360deg); }
-    }
-    @keyframes floating-2 {
-      0% { transform: translate(50vw, 5vh) rotate(45deg); }
-      33% { transform: translate(5vw, 40vh) rotate(135deg); }
-      66% { transform: translate(90vw, 85vh) rotate(225deg); }
-      100% { transform: translate(50vw, 5vh) rotate(405deg); }
-    }
-    @keyframes floating-3 {
-      0% { transform: translate(25vw, 85vh) rotate(-45deg); }
-      30% { transform: translate(75vw, 10vh) rotate(45deg); }
-      60% { transform: translate(10vw, 25vh) rotate(135deg); }
-      100% { transform: translate(25vw, 85vh) rotate(315deg); }
-    }
-    @keyframes floating-4 {
-      0% { transform: translate(90vw, 50vh) rotate(90deg); }
-      40% { transform: translate(30vw, 90vh) rotate(180deg); }
-      80% { transform: translate(5vw, 15vh) rotate(270deg); }
-      100% { transform: translate(90vw, 50vh) rotate(450deg); }
-    }
-    @keyframes floating-5 {
-      0% { transform: translate(60vw, 90vh) rotate(-90deg); }
-      35% { transform: translate(95vw, 35vh) rotate(0deg); }
-      70% { transform: translate(40vw, 5vh) rotate(90deg); }
-      100% { transform: translate(60vw, 90vh) rotate(270deg); }
-    }
-  `,
-    []
-  );
-
-  return (
-    <>
-      <style>{floatingKeyframes}</style>
-
-      <div className="fixed inset-0 pointer-events-none z-30 overflow-hidden">
-        {selectedImages.map((imageSrc, index) => (
-          <div
-            key={`${imageSrc}-${index}`}
-            className="absolute opacity-80 hover:opacity-90 transition-opacity duration-300"
-            style={generateFloatingAnimation(index)}
-          >
-            <img
-              src={imageSrc}
-              alt={`Wedding photo ${index + 1}`}
-              className="w-36 h-36 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full object-cover shadow-xl border-2 border-white/60 hover:border-white/80 transition-all duration-500"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-        ))}
-      </div>
-    </>
-  );
-});
 
 export default function App() {
   const [isCurtainOpen, setIsCurtainOpen] = useState(false);
@@ -473,8 +370,6 @@ export default function App() {
           ></div>
         ))}
       </div>
-
-      {isCurtainOpen && <FloatingImages />}
 
       {/* Main Content */}
       <div
