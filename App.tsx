@@ -95,6 +95,7 @@ const ArrowLeftIcon = ({ className }: { className?: string }) => (
 const imageImport = {
   5: "/5.webp",
   11: "/11.webp",
+  qr: "/qr.jpg",
 };
 
 // Countdown Timer Component
@@ -143,7 +144,7 @@ const Countdown = ({ targetDate }: { targetDate: Date }) => {
       {timeUnits.map((unit) => (
         <div
           key={unit.label}
-          className="flex flex-col items-center justify-center bg-white/50 p-3 rounded-lg shadow-lg w-20 h-16 md:w-28 md:h-28"
+          className="flex flex-col items-center justify-center bg-white/50 p-3 rounded-lg shadow-lg w-20 h-16 md:w-28 md:h-28 hover:bg-white/70 hover:scale-105 transition-all duration-300"
         >
           <span className="text-3xl md:text-5xl font-bold">
             {String(unit.value).padStart(2, "0")}
@@ -160,8 +161,18 @@ export default function App() {
   const [guestName, setGuestName] = useState("Bạn");
   const [hasAutoTriggered, setHasAutoTriggered] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalClosing, setIsModalClosing] = useState(false);
 
   const weddingDate = useMemo(() => new Date("2025-11-30T11:00:00"), []);
+
+  const handleModalClose = useCallback(() => {
+    setIsModalClosing(true);
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setIsModalClosing(false);
+    }, 300);
+  }, []);
 
   const handleBackButton = useCallback(() => {
     if (isAtTop) {
@@ -248,6 +259,32 @@ export default function App() {
 
   return (
     <div className="bg-[#fdf8f5] min-h-screen relative overflow-x-hidden">
+      <style jsx>{`
+        @keyframes modalSlideIn {
+          0% {
+            transform: scale(0.8) translateY(-20px);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+          }
+        }
+
+        @keyframes heartFloat {
+          0%,
+          100% {
+            transform: translateY(0px) rotate(0deg);
+          }
+          50% {
+            transform: translateY(-10px) rotate(5deg);
+          }
+        }
+
+        .heart-float {
+          animation: heartFloat 3s ease-in-out infinite;
+        }
+      `}</style>
       {/* Curtain Elements */}
       <div
         className={`fixed top-0 left-0 w-1/2 h-full bg-[#ccc] z-50 transform transition-transform duration-1000 ease-in-out ${
@@ -339,7 +376,7 @@ export default function App() {
             </p>
             <div className="flex items-center justify-center">
               <div className="h-px bg-white/50 w-16"></div>
-              <HeartIcon className="h-8 w-8 text-red-400 mx-4 animate-pulse" />
+              <HeartIcon className="h-8 w-8 text-red-400 mx-4 heart-float" />
               <div className="h-px bg-white/50 w-16"></div>
             </div>
             <p className="font-dancing text-5xl md:text-7xl drop-shadow-lg">
@@ -351,7 +388,7 @@ export default function App() {
             className="cursor-pointer group fixed bottom-[28px] left-[50%] translate-x-[-50%]"
             onClick={() => setIsCurtainOpen(true)}
           >
-            <div className="inline-flex flex-col items-center bg-white/10 backdrop-blur-sm rounded-full px-8 py-4 border border-white/30 hover:bg-white/20 transition-all duration-300 group-hover:scale-105">
+            <div className="inline-flex flex-col items-center bg-white/10 backdrop-blur-sm rounded-full px-8 py-4 border border-white/30 hover:bg-white/20 transition-all duration-500 group-hover:scale-110 hover:shadow-2xl">
               <ChevronDoubleDownIcon className="h-8 w-8 mb-2 animate-bounce" />
               <p className="text-sm font-semibold tracking-wider">CONTINUE</p>
             </div>
@@ -387,7 +424,7 @@ export default function App() {
           <div className="relative z-10 text-white">
             <h1 className="font-dancing text-5xl md:text-8xl my-4">
               Quốc Bảo
-              <HeartIcon className="h-8 w-8 text-red-500 inline-block mx-2 animate-pulse" />
+              <HeartIcon className="h-8 w-8 text-red-500 inline-block mx-2 heart-float" />
               Kim Hồng
             </h1>
             <Countdown targetDate={weddingDate} />
@@ -445,9 +482,21 @@ export default function App() {
           </section>
         </main>
 
-        <footer className="text-center py-12">
-          <p className="font-dancing text-3xl text-amber-800">Thank You!</p>
-          <HeartIcon className="h-8 w-8 text-red-500 inline-block mt-2" />
+        <footer className="text-center py-4 px-6 bg-white/60 ">
+          <div className="flex items-center justify-center">
+            <div className="flex-1">
+              <p className="font-dancing text-3xl text-amber-800">Thank You!</p>
+              <HeartIcon className="h-8 w-8 text-red-500 inline-block mt-2 heart-float" />
+            </div>
+            <div className="bg-white p-2 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+              <img
+                src={imageImport.qr}
+                alt="QR Code"
+                className="w-32 h-32 md:w-40 md:h-40 object-contain cursor-pointer hover:scale-110 transition-all duration-500 hover:brightness-110"
+                onClick={() => setIsModalOpen(true)}
+              />
+            </div>
+          </div>
           <button
             onClick={handleBackButton}
             className={`fixed bottom-2 left-2 z-40 bg-white/90 backdrop-blur-sm hover:bg-white text-amber-800 hover:text-amber-900 p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 ${
@@ -468,6 +517,39 @@ export default function App() {
           </button>
         </footer>
       </div>
+
+      {/* Image Modal */}
+      {isModalOpen && (
+        <div
+          className={`fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-4 transition-all duration-300 ${
+            isModalClosing ? "opacity-0" : "opacity-100"
+          }`}
+          onClick={handleModalClose}
+        >
+          <div
+            className={`relative max-w-2xl max-h-[90vh] bg-white rounded-lg p-4 shadow-2xl transition-all duration-300 transform ${
+              isModalClosing ? "scale-90 opacity-0" : "scale-100 opacity-100"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              animation: isModalClosing ? "none" : "modalSlideIn 0.3s ease-out",
+            }}
+          >
+            <button
+              onClick={handleModalClose}
+              className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg leading-none font-bold transition-all duration-200 z-10 hover:scale-110 active:scale-95"
+              aria-label="Đóng"
+            >
+              ×
+            </button>
+            <img
+              src={imageImport.qr}
+              alt="QR Code - Enlarged"
+              className="w-full h-auto max-h-[80vh] object-contain rounded transition-transform duration-300 hover:scale-105"
+            />
+          </div>
+        </div>
+      )}
 
       <div className={`h-screen ${isCurtainOpen ? "hidden" : "block"}`}></div>
     </div>
